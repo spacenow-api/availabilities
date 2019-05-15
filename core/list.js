@@ -4,11 +4,15 @@ import { success, failure } from "../libs/response-lib"
 export const main = async (event, context) => {
   
   const params = {
-    TableName: process.env.tableName
+    TableName: process.env.tableName,
+    KeyConditionExpression: "listingId = :listingId",
+    ExpressionAttributeValues: {
+      ":listingId": event.listingId
+    }
   }
 
   try {
-    const result = await dynamoDbLib.call("scan", params);
+    const result = await dynamoDbLib.call("query", params);
     return success(result.Items)
   } catch (e) {
     console.log(e)
