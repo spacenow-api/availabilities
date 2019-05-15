@@ -82,7 +82,7 @@ functions:
           path: availabilities
           method: post
           cors: true
-          authorizer: aws_iam
+          # authorizer: aws_iam
   get:
     handler: core/get.main
     events:
@@ -90,7 +90,7 @@ functions:
           path: availabilities/{id}
           method: get
           cors: true
-          authorizer: aws_iam
+          # authorizer: aws_iam
   list:
     handler: core/list.main
     events:
@@ -98,7 +98,7 @@ functions:
           path: availabilities
           method: get
           cors: true
-          authorizer: aws_iam
+          # authorizer: aws_iam
 
 # Create our resources with separate CloudFormation templates
 resources:
