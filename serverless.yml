@@ -116,3 +116,5 @@ resources:
   - ${file(resources/api-gateway-errors.yml)}
   # DynamoDB
   - ${file(resources/dynamodb-table.yml)}
+  # SQS
+  - ${file(resources/booking-queue.yml)}
