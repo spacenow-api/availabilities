@@ -31,13 +31,13 @@ custom:
     webpackConfig: ./webpack.config.js
     includeModules: true
   domains:
-    default: api.${self:custom.ServiceName}.${self:custom.StageName}.cloud.spacenow.com
-    prod: api.${self:custom.ServiceName}.spacenow.com
+    default: api-${self:custom.ServiceName}.${self:custom.StageName}.cloud.spacenow.com
+    prod: api-${self:custom.ServiceName}.spacenow.com
   customDomain:
     domainName: ${self:custom.domains.${self:custom.StageName}, self:custom.domains.default}
     basePath: ''
     stage: ${self:custom.StageName}
-    certificateArn: arn:aws:acm:ap-southeast-2:159220020591:certificate/ec3b5931-c71d-4ddd-8157-d59964d168f2
+    certificateArn: arn:aws:acm:${opt:region}:${opt:accountId}:certificate/ec3b5931-c71d-4ddd-8157-d59964d168f2
     createRoute53Record: true
     endpointType: 'regional'
 
@@ -76,14 +76,6 @@ provider:
         - "Fn::GetAtt": [ DynamoTable, Arn ]
 
 functions:
-  create:
-    handler: core/create.main
-    events:
-      - http:
-          path: availabilities
-          method: post
-          cors: true
-          # authorizer: aws_iam
   book:
     handler: core/book.main
     events:
@@ -93,6 +85,14 @@ functions:
               - BookingQueue
               - Arn
     reservedConcurrency: 1
+  create:
+    handler: core/create.main
+    events:
+      - http:
+          path: availabilities
+          method: post
+          cors: true
+          # authorizer: aws_iam
   get:
     handler: core/get.main
     events:
