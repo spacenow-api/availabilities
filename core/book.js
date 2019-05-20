@@ -11,8 +11,8 @@ export const main = async (event, context) => {
     TableName: process.env.tableName,
     Item: {
       availabilityId: uuid.v1(),
-      listingId: event.listingId,
-      bookingId: event.bookingId,
+      listingId: data.listingId,
+      bookingId: data.bookingId,
       blockedDates: data.blockedDates,
       updatedAt: Date.now(),
       createdAt: Date.now()
