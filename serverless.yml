@@ -85,7 +85,7 @@ functions:
           cors: true
           # authorizer: aws_iam
   book:
-    handler: core/create.main
+    handler: core/book.main
     events:
       - sqs:
           arn:
