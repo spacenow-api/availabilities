@@ -4,7 +4,7 @@ import * as dynamoDbLib from "../libs/dynamodb-lib"
 import { success, failure } from "../libs/response-lib"
 
 export const main = async (event, context) => {
-  const data = JSON.parse(event.body)
+  const data = JSON.parse(event)
 
   const params = {
     TableName: process.env.tableName,
