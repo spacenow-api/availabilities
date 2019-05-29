@@ -15,6 +15,7 @@ custom:
   ServiceName: "availabilities"
   QueueName: "bookings"
   StageName: ${opt:stage, 'sandpit'}
+  StageNameCert: ${opt:stageCert, 'SANDPIT'}
   SubdomainName: "spacenow"
   FirstAttributeName: "listingId"
   SecondAttributeName: "availabilityId"
@@ -37,7 +38,11 @@ custom:
     domainName: ${self:custom.domains.${self:custom.StageName}, self:custom.domains.default}
     basePath: ''
     stage: ${self:custom.StageName}
-    certificateArn: arn:aws:acm:${opt:region}:${opt:accountId}:certificate/ec3b5931-c71d-4ddd-8157-d59964d168f2
+    certificateArn: ${ssm:/${self:custom.StageNameCert}/ACM_CERTIFICATE}
+    # certificateArn: arn:aws:acm:${opt:region}:${opt:accountId}:certificate/ec3b5931-c71d-4ddd-8157-d59964d168f2
+
+
+
     createRoute53Record: true
     endpointType: 'regional'
 
