@@ -14,8 +14,8 @@ custom:
   # commands. Or fallsback to what we have set in the provider section.
   ServiceName: "availabilities"
   QueueName: "bookings"
-  StageName: ${opt:stage, 'sandpit'}
-  StageNameCert: ${opt:stageCert, 'SANDPIT'}
+  StageName: ${opt:stage}
+  StageNameCert: ${opt:stageCert}
   SubdomainName: "spacenow"
   FirstAttributeName: "listingId"
   SecondAttributeName: "availabilityId"
@@ -23,8 +23,8 @@ custom:
   TableName: ${self:custom.StageName}-${self:custom.ServiceName}
   # Set our DynamoDB throughput for prod and all other non-prod stages.
   TableThroughputs:
-    non-prod: 3
-    prod: 5
+    nonprod: 2
+    prod: 3
     default: 1
   TableThroughput: ${self:custom.TableThroughputs.${self:custom.StageName}, self:custom.TableThroughputs.default}
   # Load our webpack config
