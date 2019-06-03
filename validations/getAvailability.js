@@ -4,7 +4,7 @@ const availability = async items => {
   let exceptionDates = Array();
 
   items.map((item) => {
-    item.bookingId ? bookingDates.push(item.blockedDates) : exceptionDates.push(item.blockedDates)
+    item.bookingId ? bookingDates.concat(item.blockedDates) : exceptionDates.concat(item.blockedDates)
   })
 
   return ({ bookingDates, exceptionDates });
