@@ -7,7 +7,7 @@ const availability = async items => {
     item.bookingId ? bookingDates.push(item.blockedDates) : exceptionDates.push(item.blockedDates)
   })
 
-  return ({ bookingDates, exceptionDates });
+  return ({ bookingDates: bookingDates.flat(1), exceptionDates: exceptionDates.flat(1) });
 
 }
 
