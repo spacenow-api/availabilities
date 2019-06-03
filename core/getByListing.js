@@ -20,6 +20,7 @@ export const main = async (event, context) => {
     const result = await getAvailability(res.Items);
     return success({count:result.Items.length, result})
   } catch (e) {
+    console.log("error ", e)
     return failure({ status: false })
   }
 
