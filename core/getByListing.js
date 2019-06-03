@@ -1,5 +1,6 @@
 import * as dynamoDbLib from "../libs/dynamodb-lib"
 import { success, failure } from "../libs/response-lib"
+import getAvailability from '../validations/getAvailability'
 
 export const main = async (event, context) => {
   
@@ -15,13 +16,9 @@ export const main = async (event, context) => {
   }
 
   try {
-    const result = await dynamoDbLib.call("scan", params);
-    let bookingDates = Array();
-    let exceptionDates = Array();
-    result.Items.map((availability) => {
-      availability.bookingId ? bookingDates.push(availability.blockedDates) : exceptionDates.push(availability.blockedDates)
-    })
-    return success({count:result.Items.length, bookingDates, exceptionDates})
+    const res = await dynamoDbLib.call("scan", params);
+    const result = await getAvailability(res.Items);
+    return success({count:result.Items.length, result})
   } catch (e) {
     return failure({ status: false })
   }
