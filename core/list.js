@@ -3,9 +3,9 @@ import { success, failure } from "../libs/response-lib"
 
 export const main = async (event, context) => {
   
+  console.log("EVENT ===>>> ", event)
   const listingId = JSON.parse(event.listingId)
 
-  console.log("EVENT ===>>> ", event)
 
   const params = {
     TableName: process.env.tableName,
