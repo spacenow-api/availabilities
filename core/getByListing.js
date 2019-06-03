@@ -16,7 +16,12 @@ export const main = async (event, context) => {
 
   try {
     const result = await dynamoDbLib.call("scan", params);
-    return success({count:result.Items.length, bookings: result.Items})
+    let bookingDates = Array();
+    let exceptionDates = Array();
+    result.Items.map((availability) => {
+      availability.bookingId ? bookingDates.push(availability.blockedDates) : exceptionDates.push(availability.blockedDates)
+    })
+    return success({count:result.Items.length, bookingDates, exceptionDates})
   } catch (e) {
     return failure({ status: false })
   }
