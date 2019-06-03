@@ -1,6 +1,5 @@
 const availability = async items => {
 
-  let availableDates = Object;
   let bookingDates = Array();
   let exceptionDates = Array();
 
@@ -8,7 +7,7 @@ const availability = async items => {
     item.bookingId ? bookingDates.push(item.blockedDates) : exceptionDates.push(item.blockedDates)
   })
 
-  return availableDates(bookingDates, exceptionDates)
+  return ({ bookingDates, exceptionDates });
 
 }
 
