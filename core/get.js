@@ -3,6 +3,8 @@ import { success, failure } from "../libs/response-lib"
 
 export const main = async (event, context) => {
   
+  console.log("event --->>> ", event);
+
   const params = {
     TableName: process.env.tableName,
     Key: {
