@@ -10,6 +10,8 @@ export const main = async (event, context) => {
     }
   }
 
+  console.log('LISTING ID', event.pathParameters.id)
+
   try {
     const result = await dynamoDbLib.call("get", params);
     if (result.Item)
