@@ -11,7 +11,6 @@ export const main = async (event, context) => {
     Item: {
       availabilityId: uuid.v1(),
       listingId: event.listingId,
-      bookingId: event.bookingId,
       blockedDates: data.blockedDates,
       updatedAt: Date.now(),
       createdAt: Date.now()

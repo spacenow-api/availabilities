@@ -106,6 +106,14 @@ functions:
           method: get
           cors: true
           # authorizer: aws_iam
+  getByListing:
+    handler: core/getByListing.main
+    events:
+      - http:
+          path: availabilities/{id}
+          method: get
+          cors: true
+          # authorizer: aws_iam
   list:
     handler: core/list.main
     events:
