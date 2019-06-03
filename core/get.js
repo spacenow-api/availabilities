@@ -3,24 +3,21 @@ import { success, failure } from "../libs/response-lib"
 
 export const main = async (event, context) => {
   
-  console.log("event --->>> ", event);
-
   const params = {
     TableName: process.env.tableName,
-    Key: {
-      availabilityId: event.pathParameters.id
+    FilterExpression: "#aId = :availabilityId",
+    ExpressionAttributeNames:{
+        "#aId": "availabilityId"
+    },
+    ExpressionAttributeValues: {
+      ":availabilityId": event.pathParameters.id
     }
   }
 
   try {
-    const result = await dynamoDbLib.call("get", params);
-    console.log("RESULT --->>> ", result);
-    if (result.Item)
-      return success(result.Item)
-    else
-      return failure({ status: false, error: "Booking not found." })
+    const result = await dynamoDbLib.call("scan", params);
+    return success({count:result.Items.length, bookings: result.Items})
   } catch (e) {
-    console.log(e)
     return failure({ status: false })
   }
 
