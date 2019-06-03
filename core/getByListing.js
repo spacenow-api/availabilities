@@ -18,7 +18,7 @@ export const main = async (event, context) => {
   try {
     const res = await dynamoDbLib.call("scan", params);
     const result = await getAvailability(res.Items);
-    return success({count:res.Items.length, result})
+    return success({result})
   } catch (e) {
     console.log("error ", e)
     return failure({ status: false })
