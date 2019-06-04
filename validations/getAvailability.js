@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const availability = async items => {
 
   let bookingDates = Array();
@@ -9,7 +11,7 @@ const availability = async items => {
 
   
 
-  return ({ bookingDates: [].concat.apply([], bookingDates), exceptionDates: [].concat.apply([], exceptionDates) });
+  return ({ bookingDates: _.flattenDeep(bookingDates), exceptionDates: _.flattenDeep(exceptionDates) });
 
 }
 
