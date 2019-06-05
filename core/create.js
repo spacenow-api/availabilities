@@ -26,7 +26,7 @@ export const main = async (event, context) => {
     params = {
       TableName: process.env.tableName,
       Key: {
-        availabilityId: booking.availabilityId,
+        listingId: booking.listingId,
       }
     }
     try {
