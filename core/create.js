@@ -8,35 +8,33 @@ export const main = async (event, context) => {
 
   let params = {
     TableName: process.env.tableName,
-    KeyConditionExpression: "#lId = :listId",
+    KeyConditionExpression: "#lId = :listId AND attribute_not_exists(#bId)",
     ExpressionAttributeNames:{
-        "#lId": "listingId"
+        "#lId": "listingId",
+        '#bId' : 'bookingId',
     },
     ExpressionAttributeValues: {
-        ":listId": data.listingId
+        ":listId": data.listingId,
     }
   }
 
   const { Items: bookingObj } = await dynamoDbLib.call("query", params);
 
-  console.log("BOOKING OBJECT", bookingObj[0])
+  console.log("BOOKING OBJECT", bookingObj)
 
-  params = {
-    TableName: process.env.tableName,
-    Key: {
-      availabilityId: bookingObj[0].availabilityId.toString(),
-    },
-    ExpressionAttributeNames : {
-      '#bId' : 'bookingId',
-   },
-    ConditionExpression:"attribute_not_exists(#bId)",
-  }
-
-  try {
-    await dynamoDbLib.call("delete", params);
-  } catch (e) {
-    console.log(e)
-  }
+  bookingObj.map((booking) => {
+    params = {
+      TableName: process.env.tableName,
+      Key: {
+        availabilityId: booking.availabilityId,
+      }
+    }
+    try {
+      await dynamoDbLib.call("delete", params);
+    } catch (e) {
+      console.log(e)
+    }
+  })
 
   params = {
     TableName: process.env.tableName,
