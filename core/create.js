@@ -26,10 +26,10 @@ export const main = async (event, context) => {
     Key: {
       availabilityId: bookingObj[0].availabilityId,
     },
-    ConditionExpression:"bookingId == :bId",
-    ExpressionAttributeValues: {
-        ":bId": null || 'undefined'
-    }
+    ExpressionAttributeNames : {
+      '#bId' : 'bookingId',
+   },
+    ConditionExpression:"attribute_not_exists(#bId)",
   }
 
   try {
