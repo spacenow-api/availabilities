@@ -8,14 +8,18 @@ export const main = async (event, context) => {
 
   let params = {
     TableName: process.env.tableName,
-    Key: {
-      listingId: data.listingId,
+    KeyConditionExpression: "#lId = :listId",
+    ExpressionAttributeNames:{
+        "#lId": "listingId"
     },
+    ExpressionAttributeValues: {
+        ":listId": data.listingId
+    }
   }
 
-  const { Item: bookingObj } = await dynamoDbLib.call("get", params);
+  const { Items: bookingObj } = await dynamoDbLib.call("query", params);
 
-  console.log("BOOKING OBJECT", bookingObj)
+  console.log("BOOKING OBJECT", bookingObj[0])
 
   params = {
     TableName: process.env.tableName,
