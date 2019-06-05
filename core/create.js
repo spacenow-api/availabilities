@@ -6,18 +6,27 @@ import { success, failure } from "../libs/response-lib"
 export const main = async (event, context) => {
   const data = JSON.parse(event.body)
 
-
-  const { Item: bookingObj } = await dynamoDbLib.call('get', {
-    TableName: process.env.tableName,
-    Key: {
-      listingId: data.listingId
-    }
-  });
-
   let params = {
     TableName: process.env.tableName,
     Key: {
-      availabilityId: bookingObj.availabilityId
+      listingId: data.listingId,
+    },
+    ExpressionAttributeNames: {
+      "#bookingId": "bookingId",
+    },
+    ExpressionAttributeValues: {
+      ":bookingId": null || "undefined",
+    },
+  }
+
+  const { Item: bookingObj } = await dynamoDbLib.call("get", params);
+
+  console.log("BOOKING OBJECT", bookingObj)
+
+  params = {
+    TableName: process.env.tableName,
+    Key: {
+      availabilityId: bookingObj.availabilityId,
     },
     ConditionExpression: attribute_not_exists(bookingObj.bookingId)
   }
