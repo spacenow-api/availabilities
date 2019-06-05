@@ -11,12 +11,11 @@ export const main = async (event, context) => {
     KeyConditionExpression: "#lId = :listId",
     ExpressionAttributeNames:{
         "#lId": "listingId",
-        '#bId' : 'bookingId',
     },
     ExpressionAttributeValues: {
         ":listId": data.listingId,
     },
-    ConditionExpression: "attribute_not_exists(#bId)",
+    ConditionExpression: "attribute_not_exists(bookingId)",
   }
 
   const { Items: bookingObj } = await dynamoDbLib.call("query", params);
