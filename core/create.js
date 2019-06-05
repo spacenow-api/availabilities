@@ -14,7 +14,7 @@ export const main = async (event, context) => {
     }
   });
 
-  const params = {
+  let params = {
     TableName: process.env.tableName,
     Key: {
       availabilityId: bookingObj.availabilityId
@@ -28,7 +28,7 @@ export const main = async (event, context) => {
     console.log(e)
   }
 
-  const params = {
+  params = {
     TableName: process.env.tableName,
     Item: {
       availabilityId: uuid.v1(),
