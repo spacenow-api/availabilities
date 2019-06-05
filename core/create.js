@@ -10,7 +10,7 @@ export const main = async (event, context) => {
   const { Item: bookingObj } = await dynamoDbLib.call('get', {
     TableName: process.env.tableName,
     Key: {
-      listingId: listingId
+      listingId: data.listingId
     }
   });
 
