@@ -11,12 +11,6 @@ export const main = async (event, context) => {
     Key: {
       listingId: data.listingId,
     },
-    ExpressionAttributeNames: {
-      "#bookingId": "bookingId",
-    },
-    ExpressionAttributeValues: {
-      ":bookingId": null || "undefined",
-    },
   }
 
   const { Item: bookingObj } = await dynamoDbLib.call("get", params);
