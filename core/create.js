@@ -8,14 +8,15 @@ export const main = async (event, context) => {
 
   let params = {
     TableName: process.env.tableName,
-    KeyConditionExpression: "#lId = :listId AND attribute_not_exists(#bId)",
+    KeyConditionExpression: "#lId = :listId",
     ExpressionAttributeNames:{
         "#lId": "listingId",
         '#bId' : 'bookingId',
     },
     ExpressionAttributeValues: {
         ":listId": data.listingId,
-    }
+    },
+    ConditionExpression: "attribute_not_exists(#bId)",
   }
 
   const { Items: bookingObj } = await dynamoDbLib.call("query", params);
