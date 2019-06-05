@@ -24,9 +24,9 @@ export const main = async (event, context) => {
   params = {
     TableName: process.env.tableName,
     Key: {
-      availabilityId: bookingObj.availabilityId,
+      availabilityId: bookingObj[0].availabilityId,
     },
-    ConditionExpression: attribute_not_exists(bookingObj.bookingId)
+    ConditionExpression: attribute_not_exists(bookingObj[0].bookingId)
   }
 
   try {
