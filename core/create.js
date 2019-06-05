@@ -22,7 +22,7 @@ export const main = async (event, context) => {
 
   console.log("BOOKING OBJECT", bookingObj)
 
-  bookingObj.map((booking) => {
+  bookingObj.map(async (booking) => {
     params = {
       TableName: process.env.tableName,
       Key: {
