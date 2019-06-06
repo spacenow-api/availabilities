@@ -27,14 +27,8 @@ export const main = async (event, context) => {
       TableName: process.env.tableName,
       Key: {
         listingId: booking.listingId,
+        availabilityId: booking.availabilityId,
       },
-      ExpressionAttributeNames:{
-        "#aId": "availabilityId",
-      },
-      ExpressionAttributeValues: {
-          ":availabilityId": booking.availabilityId,
-      },
-      ConditionExpression: "#aId=:availabilityId",
     }
     try {
       await dynamoDbLib.call("delete", params);
