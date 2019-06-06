@@ -20,8 +20,6 @@ export const main = async (event, context) => {
 
   const { Items: bookingObj } = await dynamoDbLib.call("query", params);
 
-  console.log("BOOKING OBJECT", bookingObj)
-
   bookingObj.map(async (booking) => {
     params = {
       TableName: process.env.tableName,
