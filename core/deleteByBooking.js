@@ -17,8 +17,8 @@ export const main = async event => {
         await dynamoDbLib.call('deleteItem', {
           TableName: process.env.tableName,
           Key: {
-            availabilityId: { S: record.availabilityId },
-            listingId: { S: record.listingId }
+            listingId: { S: record.listingId },
+            availabilityId: { S: record.availabilityId }
           }
         });
         return success({ status: true });

@@ -4,14 +4,14 @@ Resources:
     Properties:
       TableName: ${self:custom.TableName}
       AttributeDefinitions:
-        - AttributeName: availabilityId
+        - AttributeName: ${self:custom.FirstAttributeName}
           AttributeType: S
-        - AttributeName: listingId
+        - AttributeName: ${self:custom.SecondAttributeName}
           AttributeType: S
       KeySchema:
-        - AttributeName: availabilityId
+        - AttributeName: ${self:custom.FirstAttributeName}
           KeyType: HASH
-        - AttributeName: listingId
+        - AttributeName: ${self:custom.SecondAttributeName}
           KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: ${self:custom.TableThroughput}
