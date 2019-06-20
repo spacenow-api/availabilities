@@ -1,7 +1,7 @@
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { success, failure } from '../libs/response-lib';
 
-export default async event => {
+export const main = async event => {
   const data = JSON.parse(event.body);
   if (data.bookingId) {
     try {
