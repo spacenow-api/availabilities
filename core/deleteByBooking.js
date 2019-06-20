@@ -5,10 +5,12 @@ export const main = async event => {
   const data = JSON.parse(event.body);
   if (data.bookingId) {
     try {
-      await dynamoDbLib.call('delete', {
+      await dynamoDbLib.call('deleteItem', {
         TableName: process.env.tableName,
         Key: {
-          bookingId: data.bookingId
+          bookingId: {
+            S: data.bookingId
+          }
         }
       });
       return success({ status: true });
