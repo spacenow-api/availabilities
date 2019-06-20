@@ -3,7 +3,8 @@ import { success, failure } from '../libs/response-lib';
 
 export const main = async event => {
   console.log('deleteByBooking =>', event);
-  const data = JSON.parse(event.body);
+  const data = JSON.parse(event.body || event);
+  console.log(': data =>', data);
   if (data.bookingId) {
     try {
       const scanResponse = await dynamoDbLib.call('scan', {
