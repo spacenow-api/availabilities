@@ -14,11 +14,11 @@ export const main = async event => {
       });
       if (scanResponse.Items.length > 0) {
         const record = scanResponse.Items[0];
-        await dynamoDbLib.call('deleteItem', {
+        await dynamoDbLib.call('delete', {
           TableName: process.env.tableName,
           Key: {
-            listingId: { S: record.listingId },
-            availabilityId: { S: record.availabilityId }
+            listingId: record.listingId,
+            availabilityId: record.availabilityId
           }
         });
         return success({ status: true });
