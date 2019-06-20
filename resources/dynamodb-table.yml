@@ -4,16 +4,15 @@ Resources:
     Properties:
       TableName: ${self:custom.TableName}
       AttributeDefinitions:
-        - AttributeName: ${self:custom.FirstAttributeName}
+        - AttributeName: availabilityId
           AttributeType: S
-        - AttributeName: ${self:custom.SecondAttributeName}
+        - AttributeName: listingId
           AttributeType: S
       KeySchema:
-        - AttributeName: ${self:custom.FirstAttributeName}
+        - AttributeName: availabilityId
           KeyType: HASH
-        - AttributeName: ${self:custom.SecondAttributeName}
+        - AttributeName: listingId
           KeyType: RANGE
-      # Set the capacity based on the stage
       ProvisionedThroughput:
         ReadCapacityUnits: ${self:custom.TableThroughput}
         WriteCapacityUnits: ${self:custom.TableThroughput}
