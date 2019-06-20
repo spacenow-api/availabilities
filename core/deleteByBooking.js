@@ -3,15 +3,13 @@ import { success, failure } from '../libs/response-lib';
 
 export const main = async event => {
   console.log('deleteByBooking =>', event);
-  const data = JSON.parse(event.body || event);
-  console.log(': data =>', data);
-  if (data.bookingId) {
+  if (event.bookingId) {
     try {
       const scanResponse = await dynamoDbLib.call('scan', {
         TableName: process.env.tableName,
         FilterExpression: 'bookingId = :bookingId',
         ExpressionAttributeValues: {
-          ':bookingId': data.bookingId
+          ':bookingId': event.bookingId
         }
       });
       if (scanResponse.Items.length > 0) {
@@ -25,7 +23,7 @@ export const main = async event => {
         });
         return success({ status: true });
       } else {
-        console.warn(`Any availability found for the booking ${data.bookingId}`);
+        console.warn(`Any availability found for the booking ${event.bookingId}`);
         return success({ status: true });
       }
     } catch (err) {
