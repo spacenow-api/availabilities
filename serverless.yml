@@ -122,6 +122,14 @@ functions:
           method: delete
           cors: true
           # authorizer: aws_iam
+  deleteByBooking:
+    handler: core/deleteByBooking
+    events:
+      - http:
+          path: availabilities/deleteByBooking
+          method: delete
+          cors: true
+          # authorizer: aws_iam
 
 # Create our resources with separate CloudFormation templates
 resources:
