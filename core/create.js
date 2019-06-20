@@ -1,40 +1,36 @@
-import uuid from "uuid"
+import uuid from 'uuid';
 
-import * as dynamoDbLib from "../libs/dynamodb-lib"
-import { success, failure } from "../libs/response-lib"
+import * as dynamoDbLib from '../libs/dynamodb-lib';
+import { success, failure } from '../libs/response-lib';
 
 export const main = async (event, context) => {
-  const data = JSON.parse(event.body)
-
+  const data = JSON.parse(event.body);
   let params = {
     TableName: process.env.tableName,
-    KeyConditionExpression: "#lId = :listId",
-    ExpressionAttributeNames:{
-        "#lId": "listingId",
+    KeyConditionExpression: '#lId = :listId',
+    ExpressionAttributeNames: {
+      '#lId': 'listingId'
     },
     ExpressionAttributeValues: {
-        ":listId": data.listingId,
+      ':listId': data.listingId
     },
-    ConditionExpression: "attribute_not_exists(bookingId)",
-  }
-
-  const { Items: bookingObj } = await dynamoDbLib.call("query", params);
-
-  bookingObj.map(async (booking) => {
+    ConditionExpression: 'attribute_not_exists(bookingId)'
+  };
+  const { Items: bookingObj } = await dynamoDbLib.call('query', params);
+  bookingObj.map(async booking => {
     params = {
       TableName: process.env.tableName,
       Key: {
         listingId: booking.listingId,
-        availabilityId: booking.availabilityId,
-      },
-    }
+        availabilityId: booking.availabilityId
+      }
+    };
     try {
-      await dynamoDbLib.call("delete", params);
-    } catch (e) {
-      console.log(e)
+      await dynamoDbLib.call('delete', params);
+    } catch (err) {
+      console.error(err);
     }
-  })
-
+  });
   params = {
     TableName: process.env.tableName,
     Item: {
@@ -44,14 +40,12 @@ export const main = async (event, context) => {
       updatedAt: Date.now(),
       createdAt: Date.now()
     }
-  }
-
+  };
   try {
-    await dynamoDbLib.call("put", params);
+    await dynamoDbLib.call('put', params);
     return success(params.Item);
-  } catch (e) {
-    console.log(e)
-    return failure({ status: false })
+  } catch (err) {
+    console.error(err);
+    return failure({ status: false, error: err });
   }
-  
-}
+};

@@ -1,5 +1,5 @@
 Resources:
   BookingQueue:
-    Type: "AWS::SQS::Queue"
+    Type: 'AWS::SQS::Queue'
     Properties:
       QueueName: ${self:custom.SubdomainName}-${self:custom.StageName}-${self:custom.QueueName}

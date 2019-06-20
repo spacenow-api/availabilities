@@ -2,7 +2,6 @@ import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { success, failure } from '../libs/response-lib';
 
 export const main = async event => {
-  console.log('deleteByBooking =>', event);
   if (event.bookingId) {
     try {
       const scanResponse = await dynamoDbLib.call('scan', {
