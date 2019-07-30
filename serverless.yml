@@ -126,7 +126,7 @@ functions:
     handler: core/deleteByBooking.main
     events:
       - http:
-          path: availabilities/deleteByBooking
+          path: availabilities/deleteByBooking/{id}
           method: delete
           cors: true
           # authorizer: aws_iam

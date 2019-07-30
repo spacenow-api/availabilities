@@ -2,13 +2,13 @@ import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { success, failure } from '../libs/response-lib';
 
 export const main = async event => {
-  if (event.bookingId) {
+  if (event.pathParameters.id) {
     try {
       const scanResponse = await dynamoDbLib.call('scan', {
         TableName: process.env.tableName,
         FilterExpression: 'bookingId = :bookingId',
         ExpressionAttributeValues: {
-          ':bookingId': event.bookingId
+          ':bookingId': event.pathParameters.id
         }
       });
       if (scanResponse.Items.length > 0) {
@@ -22,7 +22,7 @@ export const main = async event => {
         });
         return success({ status: true });
       } else {
-        console.warn(`Any availability found for the booking ${event.bookingId}`);
+        console.warn(`Any availability found for the booking ${event.pathParameters.id}`);
         return success({ status: true });
       }
     } catch (err) {
