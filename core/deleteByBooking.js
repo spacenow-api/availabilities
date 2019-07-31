@@ -2,6 +2,7 @@ import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { success, failure } from '../libs/response-lib';
 
 export const main = async event => {
+  console.log('av api bid', event.pathParameters.id)
   if (event.pathParameters.id) {
     try {
       const scanResponse = await dynamoDbLib.call('scan', {
@@ -13,6 +14,7 @@ export const main = async event => {
       });
       if (scanResponse.Items.length > 0) {
         const record = scanResponse.Items[0];
+        console.log('record.listingId', record.listingId)
         await dynamoDbLib.call('delete', {
           TableName: process.env.tableName,
           Key: {
