@@ -3,6 +3,7 @@ import { success, failure } from '../libs/response-lib';
 
 export const main = async event => {
   if (event.pathParameters.id) {
+    console.info(`Delete Availabilities by Booking ${event.pathParameters.id}`)
     try {
       const scanResponse = await dynamoDbLib.call('scan', {
         TableName: process.env.tableName,
