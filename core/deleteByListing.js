@@ -8,8 +8,7 @@ export const main = async (event, context) => {
       listingId: event.pathParameters.id.toString()
     }
   };
-  console.log('params', params)
-  console.log('event.pathParameters.id.toString()', event.pathParameters.id.toString())
+  
   try {
     await dynamoDbLib.call('delete', params);
     return success({ status: true });
