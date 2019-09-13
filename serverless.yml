@@ -6,6 +6,7 @@ plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-domain-manager
+  - serverless-prune-plugin
 
 # serverless-webpack configuration
 # Enable auto-packing of external modules
@@ -42,6 +43,9 @@ custom:
     # certificateArn: arn:aws:acm:${opt:region}:${opt:accountId}:certificate/ec3b5931-c71d-4ddd-8157-d59964d168f2
     createRoute53Record: true
     endpointType: 'regional'
+  prune:
+    automatic: true
+    number: 5
 
 provider:
   name: aws
