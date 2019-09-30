@@ -1,6 +1,6 @@
 // import * as dynamoDbLib from '../libs/dynamodb-lib'
 import { success, failure } from '../libs/response-lib'
-import getAvailability from '../validations/getAvailability'
+import { mapResult, mapReservations } from '../validations/getAvailability'
 import { Availabilities } from './../models'
 
 export const main = async (event) => {
@@ -20,7 +20,8 @@ export const main = async (event) => {
     const result = await Availabilities.findAll({
       where: { listingId: event.pathParameters.id }
     })
-    const availability = await getAvailability(result)
+    result.map(mapReservations)
+    const availability = await mapResult(result)
     return success({ availability })
   } catch (err) {
     console.error(err)

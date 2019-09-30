@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-const availability = async (items) => {
+const mapResult = async (items) => {
   let bookingDates = Array()
   let exceptionDates = Array()
   items.map((item) => {
@@ -14,4 +14,12 @@ const availability = async (items) => {
   }
 }
 
-export default availability
+const mapReservations = (obj) => {
+  const reservationsString = obj.blockedDates
+  if (reservationsString) {
+    obj.blockedDates = reservationsString.split(',')
+  }
+  return obj
+}
+
+export { mapResult, mapReservations }

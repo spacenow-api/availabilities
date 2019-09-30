@@ -2,6 +2,7 @@ import uuid from 'uuid'
 
 // import * as dynamoDbLib from '../libs/dynamodb-lib'
 import { success, failure } from '../libs/response-lib'
+import { mapReservations } from '../validations/getAvailability'
 import { Availabilities } from './../models'
 
 export const main = async (event) => {
@@ -28,11 +29,11 @@ export const main = async (event) => {
       bookingId: data.bookingId,
       blockedDates: data.blockedDates.join(',')
     })
-    const availabilityCreated = Availabilities.findOne({
+    const availabilityCreated = await Availabilities.findOne({
       where: { availabilityId: newAvailabilityId }
     })
     console.log('Availability Created: ', availabilityCreated)
-    return success(availabilityCreated)
+    return success(mapReservations(availabilityCreated))
   } catch (err) {
     console.error(err)
     return failure({ status: false, error: err })
