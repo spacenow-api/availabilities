@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-const mapResult = async (items) => {
+const mapResult = (items) => {
   let bookingDates = Array()
   let exceptionDates = Array()
   items.map((item) => {
