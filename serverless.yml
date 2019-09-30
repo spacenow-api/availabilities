@@ -3,9 +3,10 @@ service: ${self:custom.SubdomainName}-${self:custom.ServiceName}-api
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
+  - serverless-dotenv-plugin
   - serverless-webpack
-  - serverless-offline
   - serverless-domain-manager
+  - serverless-offline
   - serverless-prune-plugin
 
 # serverless-webpack configuration
@@ -16,7 +17,7 @@ custom:
   ServiceName: 'availabilities'
   QueueName: 'bookings'
   StageName: ${opt:stage}
-  StageNameCert: ${opt:stageCert}
+  StageNameCert: ${opt:stageCert, ''}
   SubdomainName: 'spacenow'
   FirstAttributeName: 'listingId'
   SecondAttributeName: 'availabilityId'
@@ -47,6 +48,19 @@ custom:
     automatic: true
     number: 5
 
+dotenv:
+  path: ./.env
+  basePath: ./
+  include:
+    - tableName
+    - environment
+    - region
+    - accountId
+    - DATABASE_SCHEMA
+    - DATABASE_HOST
+    - DATABASE_USERNAME
+    - DATABASE_PASSWORD
+
 provider:
   name: aws
   runtime: nodejs8.10
@@ -63,6 +77,13 @@ provider:
   # under process.env.
   environment:
     tableName: ${self:custom.TableName}
+    environment: ${self:custom.StageName}
+    region: ${opt:region, 'ap-southeast-2'}
+    accountId: ${opt:accountId, ''}
+    DATABASE_SCHEMA: ${ssm:/${opt:stageCert, 'SANDPIT'}/SPACENOW/DATABASE_SCHEMA~true}
+    DATABASE_HOST: ${ssm:/${opt:stageCert, 'SANDPIT'}/SPACENOW/DATABASE_HOST~true}
+    DATABASE_USERNAME: ${ssm:/${opt:stageCert, 'SANDPIT'}/SPACENOW/DATABASE_USER~true}
+    DATABASE_PASSWORD: ${ssm:/${opt:stageCert, 'SANDPIT'}/SPACENOW/DATABASE_PASSWORD~true}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
