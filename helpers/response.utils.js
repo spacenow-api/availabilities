@@ -1,12 +1,10 @@
-'use strict'
-
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Credentials': true,
   'Access-Control-Allow-Headers': 'x-requested-with'
 }
 
-module.exports = {
+export default {
   success: (data) => {
     return {
       headers,
@@ -20,7 +18,7 @@ module.exports = {
     return {
       headers,
       statusCode: 500,
-      body: JSON.stringify({ error: err.message ? err.message : 'Function error not identified.' })
+      body: JSON.stringify({ error: err.message ? err.message : { error: 'Error message not identified.', stack: err } })
     }
   }
 }
