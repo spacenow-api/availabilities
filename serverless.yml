@@ -1,19 +1,13 @@
-# NOTE: update this with your service name
 service: ${self:custom.SubdomainName}-${self:custom.ServiceName}-api
 
-# Use the serverless-webpack plugin to transpile ES6
 plugins:
-  - serverless-dotenv-plugin
-  - serverless-webpack
-  - serverless-domain-manager
   - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-domain-manager
   - serverless-prune-plugin
+  - serverless-webpack
 
-# serverless-webpack configuration
-# Enable auto-packing of external modules
 custom:
-  # Our stage is based on what is passed in when running serverless
-  # commands. Or fallsback to what we have set in the provider section.
   ServiceName: 'availabilities'
   QueueName: 'bookings'
   StageName: ${opt:stage}
@@ -21,15 +15,12 @@ custom:
   SubdomainName: 'spacenow'
   FirstAttributeName: 'listingId'
   SecondAttributeName: 'availabilityId'
-  # Set the table name here so we can use it while testing locally
   TableName: ${self:custom.StageName}-${self:custom.ServiceName}
-  # Set our DynamoDB throughput for prod and all other non-prod stages.
   TableThroughputs:
     nonprod: 2
     prod: 3
     default: 1
   TableThroughput: ${self:custom.TableThroughputs.${self:custom.StageName}, self:custom.TableThroughputs.default}
-  # Load our webpack config
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
@@ -53,7 +44,6 @@ custom:
     basePath: ''
     stage: ${self:custom.StageName}
     certificateArn: ${ssm:/${self:custom.StageNameCert}/ACM_CERTIFICATE}
-    # certificateArn: arn:aws:acm:${opt:region}:${opt:accountId}:certificate/ec3b5931-c71d-4ddd-8157-d59964d168f2
     createRoute53Record: true
     endpointType: 'regional'
   prune:
@@ -75,9 +65,26 @@ dotenv:
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs10.x
+  timeout: 20
   stage: ${self:custom.StageName}
   region: ${opt:region, 'ap-southeast-2'}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: '*'
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
   vpc:
     securityGroupIds:
       - ${self:custom.securityGroup.${self:custom.StageName, 'sandpit'}}
@@ -94,26 +101,6 @@ provider:
     DATABASE_HOST: ${ssm:/${opt:stageCert, 'SANDPIT'}/SPACENOW/DATABASE_HOST~true}
     DATABASE_USERNAME: ${ssm:/${opt:stageCert, 'SANDPIT'}/SPACENOW/DATABASE_USER~true}
     DATABASE_PASSWORD: ${ssm:/${opt:stageCert, 'SANDPIT'}/SPACENOW/DATABASE_PASSWORD~true}
-
-  # 'iamRoleStatements' defines the permission policy for the Lambda function.
-  # In this case Lambda functions are granted with permissions to access DynamoDB.
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:DescribeTable
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource:
-        - 'Fn::GetAtt': [DynamoTable, Arn]
-    - Effect: Allow
-      Action:
-        - lambda:InvokeFunction
-        - lambda:InvokeAsync
-      Resource: '*'
 
 functions:
   book:
@@ -132,7 +119,6 @@ functions:
           path: availabilities
           method: post
           cors: true
-          # authorizer: aws_iam
   get:
     handler: core/get.main
     events:
@@ -140,7 +126,6 @@ functions:
           path: availabilities/{id}
           method: get
           cors: true
-          # authorizer: aws_iam
   getByListing:
     handler: core/getByListing.main
     events:
@@ -148,7 +133,6 @@ functions:
           path: availabilities/getByListing/{id}
           method: get
           cors: true
-          # authorizer: aws_iam
   deleteByListing:
     handler: core/deleteByListing.main
     events:
@@ -156,7 +140,6 @@ functions:
           path: availabilities/deleteByListing/{id}
           method: delete
           cors: true
-          # authorizer: aws_iam
   deleteByBooking:
     handler: core/deleteByBooking.main
     events:
@@ -164,13 +147,8 @@ functions:
           path: availabilities/deleteByBooking/{id}
           method: delete
           cors: true
-          # authorizer: aws_iam
 
-# Create our resources with separate CloudFormation templates
 resources:
-  # API Gateway Errors
   - ${file(resources/api-gateway-errors.yml)}
-  # DynamoDB
   - ${file(resources/dynamodb-table.yml)}
-  # SQS
   - ${file(resources/booking-queue.yml)}
