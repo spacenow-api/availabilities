@@ -1,17 +1,25 @@
-import _ from 'lodash';
+import _ from 'lodash'
 
-const availability = async items => {
-  let bookingDates = Array();
-  let exceptionDates = Array();
-  items.map(item => {
+const mapResult = (items) => {
+  let bookingDates = Array()
+  let exceptionDates = Array()
+  items.map((item) => {
     item.bookingId
       ? bookingDates.push(item.blockedDates)
-      : exceptionDates.push(item.blockedDates);
-  });
+      : exceptionDates.push(item.blockedDates)
+  })
   return {
     bookingDates: _.flattenDeep(bookingDates),
     exceptionDates: _.flattenDeep(exceptionDates)
-  };
-};
+  }
+}
 
-export default availability;
+const mapReservations = (obj) => {
+  const reservationsString = obj.blockedDates
+  if (reservationsString) {
+    obj.blockedDates = reservationsString.split(',')
+  }
+  return obj
+}
+
+export { mapResult, mapReservations }
