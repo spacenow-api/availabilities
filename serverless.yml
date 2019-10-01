@@ -10,7 +10,7 @@ plugins:
 custom:
   ServiceName: 'availabilities'
   QueueName: 'bookings'
-  StageName: ${opt:stage}
+  StageName: ${opt:stage, 'sandpit'}
   StageNameCert: ${opt:stageCert, ''}
   SubdomainName: 'spacenow'
   FirstAttributeName: 'listingId'
