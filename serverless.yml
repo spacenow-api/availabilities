@@ -67,6 +67,7 @@ provider:
   name: aws
   runtime: nodejs10.x
   timeout: 20
+  versionFunctions: false
   stage: ${self:custom.StageName}
   region: ${opt:region, 'ap-southeast-2'}
   iamRoleStatements:
@@ -105,6 +106,7 @@ provider:
 functions:
   book:
     handler: core/book.main
+    memorySize: 1024
     events:
       - sqs:
           arn:
@@ -114,6 +116,7 @@ functions:
     reservedConcurrency: 1
   create:
     handler: core/create.main
+    memorySize: 1024
     events:
       - http:
           path: availabilities
@@ -121,6 +124,7 @@ functions:
           cors: true
   get:
     handler: core/get.main
+    memorySize: 1024
     events:
       - http:
           path: availabilities/{id}
@@ -128,6 +132,7 @@ functions:
           cors: true
   getByListing:
     handler: core/getByListing.main
+    memorySize: 1024
     events:
       - http:
           path: availabilities/getByListing/{id}
@@ -135,6 +140,7 @@ functions:
           cors: true
   deleteByListing:
     handler: core/deleteByListing.main
+    memorySize: 1024
     events:
       - http:
           path: availabilities/deleteByListing/{id}
@@ -142,6 +148,7 @@ functions:
           cors: true
   deleteByBooking:
     handler: core/deleteByBooking.main
+    memorySize: 1024
     events:
       - http:
           path: availabilities/deleteByBooking/{id}
