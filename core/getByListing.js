@@ -5,10 +5,11 @@ import { Availabilities } from './../models'
 export const main = async (event) => {
   try {
     const result = await Availabilities.findAll({
-      where: { listingId: event.pathParameters.id }
+      where: { listingId: event.pathParameters.id },
+      raw: true
     })
-    result.map(mapReservations)
-    const availability = mapResult(result)
+    const availabilitiesWithBlockdatesArray = result.map(mapReservations)
+    const availability = mapResult(availabilitiesWithBlockdatesArray)
     return success({ availability })
   } catch (err) {
     console.error(err)

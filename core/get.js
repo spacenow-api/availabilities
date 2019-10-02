@@ -5,7 +5,8 @@ import { Availabilities } from './../models'
 export const main = async (event) => {
   try {
     const availabilities = await Availabilities.findAll({
-      where: { availabilityId: event.pathParameters.id }
+      where: { availabilityId: event.pathParameters.id },
+      raw: true
     })
     return success({
       count: availabilities.length,

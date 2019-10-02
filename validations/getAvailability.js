@@ -1,25 +1,21 @@
-import _ from 'lodash'
-
-const mapResult = (items) => {
-  let bookingDates = Array()
-  let exceptionDates = Array()
-  items.map((item) => {
-    item.bookingId
-      ? bookingDates.push(item.blockedDates)
-      : exceptionDates.push(item.blockedDates)
+const mapResult = (availabilities) => {
+  const bookingDates = Array()
+  const exceptionDates = Array()
+  availabilities.map((a) => {
+    a.bookingId
+      ? a.blockedDates.forEach((o) => bookingDates.push(o))
+      : a.blockedDates.forEach((o) => exceptionDates.push(o))
   })
-  return {
-    bookingDates: _.flattenDeep(bookingDates),
-    exceptionDates: _.flattenDeep(exceptionDates)
-  }
+  return { bookingDates, exceptionDates }
 }
 
-const mapReservations = (obj) => {
-  const reservationsString = obj.blockedDates
+const mapReservations = (availability) => {
+  const reservationsString = availability.blockedDates
+  availability.blockedDates = []
   if (reservationsString) {
-    obj.blockedDates = reservationsString.split(',')
+    availability.blockedDates = reservationsString.split(',')
   }
-  return obj
+  return availability
 }
 
 export { mapResult, mapReservations }
