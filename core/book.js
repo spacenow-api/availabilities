@@ -6,7 +6,7 @@ import { Availabilities } from './../models'
 
 export const main = async (event) => {
   const data = JSON.parse(event.Records[0].body)
-  console.log('Queue Received: ', data)
+  console.info('Queue Received: ', data)
   try {
     const newAvailabilityId = uuid.v1()
     await Availabilities.create({
@@ -18,7 +18,7 @@ export const main = async (event) => {
     const availabilityCreated = await Availabilities.findOne({
       where: { availabilityId: newAvailabilityId }
     })
-    console.log('Availability Created: ', availabilityCreated)
+    console.info('Availability Created: ', availabilityCreated)
     return success(mapReservations(availabilityCreated))
   } catch (err) {
     console.error(err)
