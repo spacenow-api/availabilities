@@ -17,7 +17,6 @@ custom:
   SecondAttributeName: 'availabilityId'
   TableName: ${self:custom.StageName}-${self:custom.ServiceName}
   TableThroughputs:
-    nonprod: 2
     prod: 3
     default: 1
   TableThroughput: ${self:custom.TableThroughputs.${self:custom.StageName}, self:custom.TableThroughputs.default}
@@ -71,16 +70,6 @@ provider:
   stage: ${self:custom.StageName}
   region: ${opt:region, 'ap-southeast-2'}
   iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:DescribeTable
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: '*'
     - Effect: Allow
       Action:
         - lambda:InvokeFunction
@@ -157,5 +146,4 @@ functions:
 
 resources:
   - ${file(resources/api-gateway-errors.yml)}
-  - ${file(resources/dynamodb-table.yml)}
   - ${file(resources/booking-queue.yml)}
